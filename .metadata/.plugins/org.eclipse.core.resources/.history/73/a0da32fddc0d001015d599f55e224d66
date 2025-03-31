@@ -1,0 +1,11 @@
+package com.kh.start.member.model.dto;
+
+public class MemberDTO {
+
+	private Long memberNo;
+	private String memberId;
+	private String memberPw;
+	private String memberName;
+	private String role;
+	
+}

@@ -1,0 +1,6 @@
+package com.kh.start.member.model.dao;
+
+@Mapper
+public class MemberMapper {
+
+}

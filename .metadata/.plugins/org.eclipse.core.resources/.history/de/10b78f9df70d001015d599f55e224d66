@@ -1,0 +1,11 @@
+package com.kh.start.member.model.vo;
+
+/*
+ * Value Object
+ * V	 O
+ */
+
+public class Member {
+
+	
+}

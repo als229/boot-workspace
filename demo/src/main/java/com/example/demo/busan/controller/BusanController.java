@@ -1,0 +1,78 @@
+package com.example.demo.busan.controller;
+
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.demo.busan.model.dto.Comment;
+import com.example.demo.busan.model.service.BusanService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RestController
+@RequestMapping(value="busans")
+@RequiredArgsConstructor
+@CrossOrigin("*") // 이 포트로 오는 건 허가해준다.
+public class BusanController {
+	
+	private final BusanService busanService;
+	
+//	{
+		// 스프링에서 응답할때 사용하는 친구
+//		ResponseEntity 
+//	}
+	
+	@GetMapping
+	public ResponseEntity<String> getBusanFoods(@RequestParam(name="pageNo", defaultValue="1")int pageNo) {
+		
+		log.info("페이지 남바 : {}", pageNo);
+		String responseData = busanService.requestGetBusan(pageNo);
+		
+		return ResponseEntity.ok(responseData);
+	}
+	
+	// 2 절하기 상세 조회
+	@GetMapping("/{id}")
+	public ResponseEntity<String> getBusanDetail(@PathVariable(name="id") int id){
+		
+		log.info("식당 번호 : {}", id);
+		
+		String response = busanService.requestGetBusanDetail(id);
+		
+		
+		return ResponseEntity.ok(response);	
+	}
+	
+	
+	// 3절하기 식당에 댓글 달기 및 조회
+	@PostMapping("/comments")
+	public ResponseEntity<?> save(@RequestBody Comment comment){
+		log.info("댓글이 올까유 {}",comment);
+		
+		busanService.saveComment(comment);
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping("/comments/{id}")
+	public ResponseEntity<List<Comment>> getComments(@PathVariable(name="id") Long id){
+		List<Comment> comments = busanService.selectCommentList(id);
+		
+		log.info("나오냐? {}" ,comments);
+		return ResponseEntity.ok(comments);
+	}
+	
+	// 4절하기 부틀 바꿔서 돌리기
+	
+	
+}

@@ -1,0 +1,9 @@
+package com.kh.test;
+
+@RestController
+@RequestMapping("test")
+// SpringBoot는 기본적으로 produces 속성이 application/json charset=UTF-8이기 때문에
+// 자동으로 MessageConvertor로 변환됨
+public class TestController {
+
+}

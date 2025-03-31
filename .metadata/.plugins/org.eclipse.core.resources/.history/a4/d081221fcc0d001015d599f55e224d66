@@ -1,0 +1,12 @@
+package com.kh.test;
+
+public class BeanConfig {
+
+	/*
+	 * 구닥다리 방법
+	 * root-context.xml
+	 * 
+	 * <bean class="풀클래스명">
+	 * 
+	 */
+}

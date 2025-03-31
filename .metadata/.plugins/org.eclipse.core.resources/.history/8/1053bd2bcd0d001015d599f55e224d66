@@ -1,0 +1,21 @@
+package com.kh.test;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("test")
+// SpringBoot는 기본적으로 produces 속성이 application/json charset=UTF-8이기 때문에
+// 자동으로 MessageConvertor로 변환됨
+public class TestController {
+	
+	@Autowired
+	private StudyBean studyBean;
+	
+	@GetMapping
+	public ResponseEntity<String> getTest(){
+		
+	}
+
+}

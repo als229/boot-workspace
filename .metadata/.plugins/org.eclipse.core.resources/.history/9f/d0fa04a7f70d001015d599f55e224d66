@@ -1,0 +1,15 @@
+package com.kh.start.member.model.vo;
+
+import lombok.Value;
+
+/*
+ * Value Object
+ * V	 O
+ * @Value => 롬복에서 지원해주는 애노테이션
+ */
+
+@Value
+public class Member {
+
+	
+}

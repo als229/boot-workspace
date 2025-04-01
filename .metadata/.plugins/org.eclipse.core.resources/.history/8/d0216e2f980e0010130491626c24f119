@@ -1,0 +1,5 @@
+package com.kh.start.auth.controller;
+
+public class AuthController {
+
+}

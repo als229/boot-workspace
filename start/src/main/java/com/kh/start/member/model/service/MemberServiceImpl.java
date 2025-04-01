@@ -3,6 +3,7 @@ package com.kh.start.member.model.service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.kh.start.exception.MemberIdDuplicateException;
 import com.kh.start.member.model.dao.MemberMapper;
 import com.kh.start.member.model.dto.MemberDTO;
 import com.kh.start.member.model.vo.Member;
@@ -24,8 +25,9 @@ public class MemberServiceImpl implements MemberService{
 		MemberDTO searchedMember = mapper.getMemberByMemberId(member.getMemberId());
 		
 		if(searchedMember != null) {
-			throw new RuntimeException("이미 아이디가 있어유");
+			throw new MemberIdDuplicateException("이미 아이디가 있어유");
 		}
+		log.info("나와라 나와라 나와라 {}",passwordEncoder.encode(member.getMemberPw()));
 		
 		// 1. 비밀번호 암호화
 //		passwordEncoder.encode(member.getMemberPw()); 이렇게도 가능하지만 신경써서 해보자잉?

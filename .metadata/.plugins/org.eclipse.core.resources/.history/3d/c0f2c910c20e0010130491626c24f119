@@ -1,0 +1,20 @@
+package com.kh.start.token.model.service;
+
+import java.util.Map;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RequiredArgsConstructor
+public class TokenServiceImpl implements TokenService{
+
+	@Override
+	public Map<String, String> generateToken(String username) {
+		
+		
+		
+		return null;
+	}
+
+}

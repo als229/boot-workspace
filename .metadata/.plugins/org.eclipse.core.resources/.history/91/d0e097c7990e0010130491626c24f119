@@ -1,0 +1,7 @@
+package com.kh.start.auth.service;
+
+public interface AuthService {
+
+	Map<String, String> login(MemberDTO member);
+	
+}

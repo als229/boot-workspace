@@ -1,0 +1,6 @@
+package com.kh.start.auth.controller;
+
+@RequestMapping("auth")
+public class AuthController {
+
+}

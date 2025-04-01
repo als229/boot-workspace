@@ -1,0 +1,58 @@
+package com.kh.start.configuration;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+public class SecurityConfigure {
+
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+		
+		//return httpSecurity.formLogin().disable().build(); 과거에 사용하던 코드
+		
+		/* 그 다음에 쓰는 코드(너무 김)
+		return httpSecurity.formLogin(new Customizer<FormLoginConfigurer<HttpSecurity>> () {
+			@Override
+			public void customize(FormLoginConfigurer<HttpSecurity> t) {
+				t.disable();
+			}
+		}).build();
+		
+		
+		Cross Site Request Foregery
+		
+		ex) <img src="http://우리도메인/logout" />
+			<form action="http://우리도메인/logout" action= "post">
+				<input type="hidden" value="admin" name="userId">
+				<button>눌러보세용~</button>
+			</form>
+			
+		이런 식으로 공격 할 수도 있음
+		*/
+		
+		return httpSecurity.formLogin(AbstractHttpConfigurer::disable)
+				.httpBasic(AbstractHttpConfigurer::disable)
+				.csrf(AbstractHttpConfigurer::disable).build();
+		
+	}
+	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+	
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig ) throws Exception {
+		return authConfig.getAuthenticationManager();
+	}
+
+	
+}

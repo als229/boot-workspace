@@ -1,0 +1,19 @@
+package com.kh.start.exception;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+	@ExceptionHandler(MemberIdDuplicateException.class)
+	public ResponseEntity<?> handleDuplicateMemberId(MemberIdDuplicateException e){
+		Map<String, String> error = new HashMap();
+		return ResponseEntity.badRequest().body(e.getMessage());
+	}
+	
+}

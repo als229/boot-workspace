@@ -1,0 +1,8 @@
+package com.kh.start.exception;
+
+public class CustomAuthenticationException {
+	public CustomAuthenticationException (Sting message) {
+		super(message);
+	}
+
+}

@@ -1,0 +1,13 @@
+package com.kh.start.auth.util;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class JwtUtil {
+	// 토큰은 헤더, 페이로드, 시그니쳐 세 부분으로 나눠짐
+	
+	
+	
+	
+
+}

@@ -1,0 +1,5 @@
+package com.kh.start.token.model.service;
+
+public class TokenService {
+
+}

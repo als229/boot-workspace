@@ -1,0 +1,8 @@
+package com.kh.start.exception;
+
+public class MemberIdDuplicateException {
+
+	public MemberIdDuplicateException() {
+		super("아이디 중복 오류");
+	}
+}

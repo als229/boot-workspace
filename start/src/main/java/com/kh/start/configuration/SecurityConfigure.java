@@ -2,6 +2,9 @@ package com.kh.start.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfigure {
 
+	// 스프링 시큐리티에 필터체인을 정의하는 메서드
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		
@@ -38,7 +42,13 @@ public class SecurityConfigure {
 		
 		return httpSecurity.formLogin(AbstractHttpConfigurer::disable)
 				.httpBasic(AbstractHttpConfigurer::disable)
-				.csrf(AbstractHttpConfigurer::disable).build();
+				.csrf(AbstractHttpConfigurer::disable)
+				.authorizeHttpRequests(requests -> {
+					requests.requestMatchers(HttpMethod.POST, "/auth/login", "/members").permitAll(); // 포스트 요청으로 오는 저 두개 요청은 다 허가
+					requests.requestMatchers("/admin/**").hasRole("ADMIN"); // 어드민으로 시작하는 요청은 반드시 롤에 어드민이어야함
+					requests.requestMatchers(HttpMethod.PUT, "members").authenticated(); // 포스트 요청으로 오는 members는 걸러줘야함?
+				})
+				.build();
 		
 	}
 	
@@ -46,5 +56,11 @@ public class SecurityConfigure {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig ) throws Exception {
+		return authConfig.getAuthenticationManager();
+	}
+
 	
 }

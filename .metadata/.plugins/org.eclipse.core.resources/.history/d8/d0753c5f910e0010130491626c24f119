@@ -1,0 +1,25 @@
+package com.kh.start.member.model.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class MemberDTO {
+
+	private Long memberNo;
+	
+	@NotBlank
+	private String memberId;
+	private String memberPw;
+	private String memberName;
+	private String role;
+	
+}

@@ -1,0 +1,80 @@
+package com.kh.start.configuration.filter;
+
+import java.io.IOException;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.kh.start.auth.model.vo.CustomUserDetails;
+import com.kh.start.auth.service.UserDetailsServiceImpl;
+import com.kh.start.auth.util.JwtUtil;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class JwtFilter extends OncePerRequestFilter{
+
+	private final JwtUtil util;
+	private final UserDetailsServiceImpl userService; 
+	
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
+		log.info("나오니? 여긴 두필터 인터널");
+		
+		String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+		
+		log.info("오소라이제이숀 넘어오냐 ? {}", authorization );
+		if(authorization == null || !authorization.startsWith("Bearer ")) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+		
+		String token = authorization.split(" ")[1];
+		
+		log.info("토큰값 : {}", token);
+		
+		// 1. 토큰 만료기간 지남?
+		// 2. 유효한 토큰이 맞남?
+		try {
+			// 비밀번호 바꾸기 인가 절차 구현중임.
+			Claims claims = util.parseJwt(token);
+			String username = claims.getSubject();
+//			log.info(username);
+			// 인가받는데 성공한 사용자의 정보가 필요함
+			// 사용자의 정보를 SecurityContextHolder => Context => Authentication에 담을것이다.
+			CustomUserDetails user = (CustomUserDetails)userService.loadUserByUsername(username);
+			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+						user,null, user.getAuthorities()
+					);
+			
+		} catch (ExpiredJwtException e) {
+			log.info("토큰 만료기간 지남.");
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.getWriter().write("만료된 토큰데스");
+		} catch (JwtException e) {
+			log.info("유효하지 않은 또끈");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().write("유효하지 않은 또끈");
+			return;
+		}
+		
+		doFilter(request, response, filterChain);
+	}
+	
+	
+	
+
+}

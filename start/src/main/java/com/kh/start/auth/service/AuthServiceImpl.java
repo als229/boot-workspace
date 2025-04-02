@@ -40,10 +40,10 @@ public class AuthServiceImpl implements AuthService{
 		
 		try {
 			authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(member.getMemberId(), member.getMemberPw()));
-		}catch(AuthenticationException e) {
+		} catch (AuthenticationException e){
 			throw new CustomAuthenticationException("아이디 또는 비밀번호 잘못 입력");
 		}
-		
+		log.info("나오니?");
 		// SecurityContextHolder 안에
 		// SecurityContext 안에
 		// Principal 안에 값이 저장됨.
@@ -65,7 +65,7 @@ public class AuthServiceImpl implements AuthService{
 		 * refreshToken = jwtUtil.getRefreshToken(user.getUsername());
 		 */
 		
-		Map<String, String> loginResponse = tokenService.generateToken(user.getUsername());
+		Map<String, String> loginResponse = tokenService.generateToken(user.getUsername(), user.getMemberNo());
 		
 		/*
 		 * log.info("생성된 {} 의 accessToken 값 : {}", user.getUsername(), accessToken);

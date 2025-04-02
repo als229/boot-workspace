@@ -1,0 +1,7 @@
+package com.kh.start.board.model.vo;
+
+@Value
+@Builder
+public class Board {
+	private Long boardNo;
+}

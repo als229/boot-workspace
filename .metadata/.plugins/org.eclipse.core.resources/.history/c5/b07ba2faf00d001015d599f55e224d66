@@ -1,6 +1,0 @@
-package com.kh.start.member.model.service;
-
-@Service
-public class MemberServiceImpl {
-
-}

@@ -1,0 +1,5 @@
+package com.kh.start.board.model.dao;
+
+public interface BoardMapper {
+
+}

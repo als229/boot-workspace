@@ -1,0 +1,82 @@
+package com.kh.start.member.model.service;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.kh.start.auth.model.vo.CustomUserDetails;
+import com.kh.start.exception.MemberIdDuplicateException;
+import com.kh.start.member.model.dao.MemberMapper;
+import com.kh.start.member.model.dto.ChangePasswordDTO;
+import com.kh.start.member.model.dto.MemberDTO;
+import com.kh.start.member.model.vo.Member;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class MemberServiceImpl implements MemberService{
+
+	private final MemberMapper mapper;
+	private final PasswordEncoder passwordEncoder;
+	
+	public void signUp(MemberDTO member) {
+		// 유효성 검증
+		// 아이디 있는지 조회
+		MemberDTO searchedMember = mapper.getMemberByMemberId(member.getMemberId());
+		
+		if(searchedMember != null) {
+			throw new MemberIdDuplicateException("이미 아이디가 있어유");
+		}
+		log.info("나와라 나와라 나와라 {}",passwordEncoder.encode(member.getMemberPw()));
+		
+		// 1. 비밀번호 암호화
+//		passwordEncoder.encode(member.getMemberPw()); 이렇게도 가능하지만 신경써서 해보자잉?
+		// 2. Role(권한) 주기 => 관리자인지 사용자인지 뭔지 
+		Member memberValue = Member.builder()
+									.memberId(member.getMemberId())
+									.memberPw(passwordEncoder.encode(member.getMemberPw()))
+									.memberName(member.getMemberName())
+									.role("ROLE_USER")
+									.build();
+		
+		mapper.signUp(memberValue);
+		log.info("사용자 등록 성공 : {}", memberValue);
+	}
+
+	@Override
+	public void changePassword(ChangePasswordDTO passwordEntity) {
+		
+		// 현재 비밀번호가 일치하는지 확인
+		
+		// 맞다면 새로운 비밀번호를 암호화
+		
+		// SecurityContextHolder 에서 사용자 정보 받아오기
+		
+		// => PasswordEncoder => matches()
+		// 첫 번째 인자 : 평문, 두 번째 인자 : 암호문
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		CustomUserDetails user = (CustomUserDetails)auth.getPrincipal();
+		if(!passwordEncoder.matches(passwordEntity.getCurrentPassword() , user.getPassword())) {
+			throw new RuntimeException("비밀번호가 일치하지 않습니다...........졸리당");
+		}
+		
+		String encodedPassword = passwordEncoder.encode(passwordEntity.getNewPassword());
+		Long userNo = user.getMemberNo();
+		
+		
+		// 매퍼에 가서 UPDATE
+		// UPDATE TB_BOOT_MEMBER MEMBER_PW = ? WHERE MEMBER_NO/ID = 현재비밀번호입력값
+	}
+	
+	
+	
+	
+	
+	
+	
+}

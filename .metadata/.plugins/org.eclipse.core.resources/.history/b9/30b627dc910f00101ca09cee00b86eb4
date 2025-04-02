@@ -1,0 +1,65 @@
+package com.kh.start.token.model.service;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import com.kh.start.auth.util.JwtUtil;
+import com.kh.start.token.model.dao.TokenMapper;
+import com.kh.start.token.model.vo.RefreshToken;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class TokenServiceImpl implements TokenService{
+
+	private final JwtUtil tokenUtil;
+	private final TokenMapper tokenMapper;
+	
+	@Override
+	public Map<String, String> generateToken(String username, Long memberNo) {
+		
+		// 1. AccessToken 만들기
+		
+		// 2. RefreshToken 만들기 security 에선 username이 id
+		Map<String, String> tokens = createToken(username);
+		
+		// 3. RefreshToken Table에 INSERT 하기 (memberNo, refreshToken, expiration)
+		saveToken(tokens.get("refreshToken"), memberNo);
+		
+		// 4. 만료기간이 끝난 리프레시토큰 DELETE 하기
+		tokenMapper.deleteExpiredRefreshToken(System.currentTimeMillis());
+		
+		// 5. 사용자가 리프레시토큰을 가지고 증명하려 할 때 DB 가서 조회해오기
+		
+		return tokens;
+	}
+	
+	private void saveToken(String refreshToken, Long memberNo) {
+		
+		RefreshToken token = RefreshToken.builder()
+				.token(refreshToken)
+				.memberNo(memberNo)
+				.expiration(System.currentTimeMillis() + 36000000L * 72)
+				.build();
+		
+		tokenMapper.saveToken(token);
+	}
+	
+	private Map<String, String> createToken(String username){
+		
+		String accessToken = tokenUtil.getAccessToken(username);
+		String refreshToken = tokenUtil.getRefreshToken(username);
+		
+		Map<String, String> tokens = new HashMap();
+		tokens.put("accessToken", accessToken);
+		tokens.put("refreshToken", refreshToken);
+		
+		return tokens;
+	}
+
+}

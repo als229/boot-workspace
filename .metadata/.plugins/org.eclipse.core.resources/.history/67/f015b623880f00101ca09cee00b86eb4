@@ -1,0 +1,5 @@
+package com.kh.start.token.model.vo;
+
+public class RefreshToken {
+
+}

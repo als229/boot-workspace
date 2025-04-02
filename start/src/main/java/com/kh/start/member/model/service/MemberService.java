@@ -2,10 +2,17 @@ package com.kh.start.member.model.service;
 
 import org.springframework.stereotype.Service;
 
+import com.kh.start.member.model.dto.ChangePasswordDTO;
 import com.kh.start.member.model.dto.MemberDTO;
+
+import jakarta.validation.Valid;
 
 public interface MemberService {
 	
 	void signUp(MemberDTO member);
+
+	void changePassword(ChangePasswordDTO passwordEntity);
+	
+	void deleteByPassword(String password);
 
 }

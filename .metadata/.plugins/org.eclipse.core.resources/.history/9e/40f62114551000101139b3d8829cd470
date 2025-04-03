@@ -1,0 +1,5 @@
+package com.kh.start.comments.model.vo;
+
+public class Comment {
+
+}

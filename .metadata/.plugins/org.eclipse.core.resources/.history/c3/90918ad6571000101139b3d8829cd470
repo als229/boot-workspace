@@ -1,0 +1,5 @@
+package com.kh.start.comments.controller;
+
+public class CommentController {
+
+}

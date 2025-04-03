@@ -1,0 +1,16 @@
+package com.kh.start.file.service;
+
+import java.nio.file.Path;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class FileService {
+	
+	private final Path fileLocation;
+	
+	public FileService() {
+		
+	}
+	
+}

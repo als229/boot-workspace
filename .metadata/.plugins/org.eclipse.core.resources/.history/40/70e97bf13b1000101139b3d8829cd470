@@ -1,0 +1,12 @@
+package com.kh.start.board.model.dao;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.kh.start.board.model.vo.Board;
+
+@Mapper
+public interface BoardMapper {
+	
+	void save(Board board);
+
+}

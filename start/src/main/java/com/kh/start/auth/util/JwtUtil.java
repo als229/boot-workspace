@@ -47,8 +47,8 @@ public class JwtUtil {
 		return Jwts.builder()
 				  .subject(username) // 사용자 이름
 				  .issuedAt(new Date()) // 발급일
-//				  .expiration(new Date(System.currentTimeMillis() + 36000000L*24*3)) // 만료일
-				  .expiration(new Date())
+				  .expiration(new Date(System.currentTimeMillis() + 36000000L*24*3)) // 만료일
+//				  .expiration(new Date())
 				  .signWith(key) // 서명
 				  .compact();
 	}

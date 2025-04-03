@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.kh.start.auth.model.vo.CustomUserDetails;
@@ -40,6 +41,7 @@ public class AuthServiceImpl implements AuthService{
 		
 		try {
 			authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(member.getMemberId(), member.getMemberPw()));
+			// UserDetailsServiceImpl 얘가 호출돼서 비교하고 UserDetails 객체 반환해서 저장됨. 프린시팔에
 		} catch (AuthenticationException e){
 			throw new CustomAuthenticationException("아이디 또는 비밀번호 잘못 입력");
 		}
@@ -77,8 +79,19 @@ public class AuthServiceImpl implements AuthService{
 		
 		loginResponse.put("memberId", user.getUsername());
 		loginResponse.put("memberName", user.getMemberName());
+		loginResponse.put("memberNo", String.valueOf(user.getMemberNo()));
 		
 		return loginResponse;
+	}
+
+	@Override
+	public CustomUserDetails getUserDetails() {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		CustomUserDetails user = (CustomUserDetails)auth.getPrincipal();
+		
+		return user;
 	}
 
 }

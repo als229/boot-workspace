@@ -57,8 +57,10 @@ public class SecurityConfigure {
 				.authorizeHttpRequests(requests -> {
 					requests.requestMatchers(HttpMethod.POST, "/auth/**", "/members").permitAll(); // 포스트 요청으로 오는 저 두개 요청은 다 허가
 					requests.requestMatchers("/admin/**").hasRole("ADMIN"); // 어드민으로 시작하는 요청은 반드시 롤에 어드민이어야함
-					requests.requestMatchers(HttpMethod.PUT, "members").authenticated(); //풋 요청으로 오는 members는 걸러줘야함
-					requests.requestMatchers(HttpMethod.DELETE, "members").authenticated(); //DELETE 요청으로 오는 members는 걸러줘야함
+					requests.requestMatchers(HttpMethod.PUT, "/members","/boards/**").authenticated(); //풋 요청으로 오는 members는 걸러줘야함
+					requests.requestMatchers(HttpMethod.GET, "/uploads/**", "/boards/**","/comments/**").permitAll(); //풋 요청으로 오는 members는 걸러줘야함
+					requests.requestMatchers(HttpMethod.DELETE, "/members","/boards/**").authenticated(); // DELETE 요청으로 오는 members는 걸러줘야함
+					requests.requestMatchers(HttpMethod.POST, "/boards", "/comments").authenticated(); // POST로 오는 boards 인가받아야 올수 있음
 				})
 				/*
 				 * sessionManagement : 세션을 어떻게 관리할 것 인지를 지정할 수 있음

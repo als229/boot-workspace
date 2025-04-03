@@ -1,12 +1,10 @@
 package com.kh.start.exception;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,23 +14,39 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+	
+	private ResponseEntity<Map<String,String>> makeResponseEntity(RuntimeException e, HttpStatus status){
+		Map<String, String> error = new HashMap();
+		error.put("error-message", e.getMessage());
+		
+		return ResponseEntity.status(status).body(error);
+	}
 
 	@ExceptionHandler(MemberIdDuplicateException.class)
 	public ResponseEntity<?> handleDuplicateMemberId(MemberIdDuplicateException e){
 		Map<String, String> error = new HashMap();
 		error.put("error-message", e.getMessage());
 		
-		return ResponseEntity.badRequest().body(e.getMessage());
+		return ResponseEntity.badRequest().body(error);
 	}
 
 	@ExceptionHandler(CustomAuthenticationException.class)
 	public ResponseEntity<?> handleDuplicateMemberId(CustomAuthenticationException e){
-		Map<String, String> error = new HashMap();
-		error.put("error-message", e.getMessage());
-		
-		return ResponseEntity.badRequest().body(e.getMessage());
+//		Map<String, String> error = new HashMap();
+//		error.put("error-message", e.getMessage());
+//		
+//		return ResponseEntity.badRequest().body(e.getMessage());
+		return makeResponseEntity(e, HttpStatus.BAD_REQUEST);
 	}
 	
+	@ExceptionHandler(InvalidUserRequestException.class)
+	public ResponseEntity<?> handleDuplicateMemberId(InvalidUserRequestException e){
+//		Map<String, String> error = new HashMap();
+//		error.put("error-message", e.getMessage());
+//		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+		return makeResponseEntity(e, HttpStatus.UNAUTHORIZED);
+		
+	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<?> handleArgumentsNotValid(MethodArgumentNotValidException e){
@@ -51,4 +65,12 @@ public class GlobalExceptionHandler {
 		
 		return ResponseEntity.badRequest().body(errors);
 	}
+	
+	/* 
+	 * @ExceptionHandler(RuntimeException.class) public ResponseEntity<?>
+	 * handleDuplicateMemberId(RuntimeException e){ Map<String, String> error = new
+	 * HashMap(); error.put("error-message", e.getMessage());
+	 * 
+	 * return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); }
+	 */
 }

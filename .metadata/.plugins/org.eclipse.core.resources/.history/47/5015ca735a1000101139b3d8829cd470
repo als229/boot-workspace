@@ -1,0 +1,21 @@
+package com.kh.start.comments.model.service;
+
+import java.util.List;
+
+import com.kh.start.comments.model.dto.CommentDTO;
+
+public class CommentServiceImpl implements CommentService{
+
+	@Override
+	public void insertComment(CommentDTO comment) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<CommentDTO> selectCommentList(Long boardNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

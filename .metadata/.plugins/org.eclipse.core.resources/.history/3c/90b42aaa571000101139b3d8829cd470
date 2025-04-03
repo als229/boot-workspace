@@ -1,0 +1,10 @@
+package com.kh.start.comments.model.service;
+
+import com.kh.start.comments.model.dto.CommentDTO;
+
+public interface CommentService {
+
+	void insertComment (CommentDTO comment);
+	
+	List<CommentDTO> selectCommentList(Long boardNo);
+}

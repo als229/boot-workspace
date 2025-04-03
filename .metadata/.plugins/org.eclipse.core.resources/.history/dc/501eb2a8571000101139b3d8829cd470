@@ -1,0 +1,6 @@
+package com.kh.start.comments.model.service;
+
+public interface CommentService {
+
+	void insertComment (CommentDTO comment);
+}

@@ -1,0 +1,22 @@
+package com.kh.start.comments.model.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.kh.start.comments.model.dto.CommentDTO;
+
+@Service
+public class CommentServiceImpl implements CommentService{
+
+	@Override
+	public void insertComment(CommentDTO comment) {
+		
+	}
+
+	@Override
+	public List<CommentDTO> selectCommentList(Long boardNo) {
+		return null;
+	}
+
+}
